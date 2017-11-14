@@ -181,7 +181,7 @@ public class LoginActivity extends AppCompatActivity {
             showProgress(false);
 
             if(validUser == true) {
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                Intent intent = new Intent(LoginActivity.this, NavActivity.class);
                 intent.putExtra(Intent.EXTRA_TEXT, username);
                 startActivity(intent);
             }

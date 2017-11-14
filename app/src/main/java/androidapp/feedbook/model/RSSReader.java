@@ -1,5 +1,8 @@
 package androidapp.feedbook.model;
 
+import android.os.AsyncTask;
+import android.util.Log;
+
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
@@ -21,7 +24,7 @@ import androidapp.feedbook.exceptions.RSSException;
  * @author Kiruthiga
  *
  */
-public class RSSReader {
+public class RSSReader extends AsyncTask<String, Void, Feed> {
 
 	private final String url;
 	private final String category;
@@ -76,10 +79,17 @@ public class RSSReader {
 	 * @throws RSSException - when error occurs while reading the feed url
 	 */
 	@SuppressWarnings("unchecked")
-	public Feed readFeed() throws  RSSException {
-		Feed feedObj = null;
+	//public Feed readFeed() throws  RSSException {
+	protected Feed doInBackground(String... urls) {
 
-		SyndFeed feed = getSyndFeedForUrl();
+		Feed feedObj = null;
+		SyndFeed feed = null;
+		try {
+			feed = getSyndFeedForUrl();
+		}catch (RSSException e)
+		{
+			Log.e("RSS Error",e.getMessage().toString());
+		}
 
 		feedObj = new Feed(category, "");
 		int articleid = 0;
@@ -106,4 +116,10 @@ public class RSSReader {
 
 		return feedObj;
 	}
+
+	protected void onPostExecute(Feed feed) {
+		// TODO: check this.exception
+		// TODO: do something with the feed
+	}
+
 }
