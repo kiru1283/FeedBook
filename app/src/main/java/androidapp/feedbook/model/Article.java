@@ -138,9 +138,11 @@ public class Article {
 	 */
 	 @Override
 	    public String toString() {
-	        return "Article No."+articleid +" [title=" + title + ", description=" + description
-	                + ", link=" + link + ", creator=" + creator + ", guid=" + guid
-	                + ", pubdate=" + pubdate + "]";
+	       /* return "Article No."+articleid +" [title=" + title + "; description=" + description
+	                + "; link=" + link + "; creator=" + creator + "; guid=" + guid
+	                + "; pubdate=" + pubdate + "]";*/
+	       return "link=" + link  +"| title=" + title + "| description=" + description
+				   + "| pubdate=" + pubdate ;
 	    }
 
 	

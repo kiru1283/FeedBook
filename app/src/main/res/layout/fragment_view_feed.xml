@@ -11,7 +11,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/linear"
+        android:id="@+id/linear_manage"
         android:layout_alignParentLeft="true"
         android:orientation="horizontal"
         android:paddingTop="@dimen/activity_vertical_margin">
@@ -23,46 +23,29 @@
             android:text="@string/category" />
 
         <Spinner
-            android:id="@+id/spinner"
+            android:id="@+id/spinner_manage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:entries="@array/category_arrays"
             android:prompt="@string/category_prompt" />
     </LinearLayout>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/linear_second"
+        android:id="@+id/linear_check"
         android:layout_alignParentLeft="true"
-        android:orientation="horizontal"
-        android:paddingTop="@dimen/activity_vertical_margin"
-        android:layout_below="@+id/linear">
-       <TextView
-            android:id="@+id/txt_url"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/url" />
-
-
-    <EditText
-    android:id="@+id/edit_url"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:inputType=""
-    android:maxLines="1"
-    android:singleLine="true"
-    />
-
+        android:layout_below="@id/linear_manage"
+        android:orientation="vertical"
+        android:paddingTop="@dimen/activity_vertical_margin">
     </LinearLayout>
-
-    <Button
-        android:id="@+id/btn_add"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/subscribe"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@id/linear_second"
-        android:paddingTop="@dimen/activity_vertical_margin"/>
+        android:id="@+id/linear_btn"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/linear_check"
+        android:orientation="vertical"
+        android:paddingTop="@dimen/activity_vertical_margin">
+    </LinearLayout>
 
 </RelativeLayout>

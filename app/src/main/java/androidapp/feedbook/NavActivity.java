@@ -104,14 +104,16 @@ https://www.journaldev.com/9958/android-navigation-drawer-example-tutorial
         Fragment fragment = null;
 
         if (id == R.id.nav_Subscribe) {
-            // Handle the camera action
+            // Handle the subscription action
             fragment = SubscribeFragment.newInstance(userid);
 
         } else if (id == R.id.nav_Feed) {
-
+            fragment = ViewFeedFragment.newInstance(userid);
         } else if (id == R.id.nav_Fav) {
 
         } else if (id == R.id.nav_Manage) {
+            //to handle the unsubscribe event
+            fragment = ManageFragment.newInstance(userid);
 
         } else if (id == R.id.nav_share) {
 
@@ -132,4 +134,5 @@ https://www.journaldev.com/9958/android-navigation-drawer-example-tutorial
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
 }

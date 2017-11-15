@@ -7,9 +7,15 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
+
+import java.util.List;
+import java.util.Vector;
 
 import androidapp.feedbook.controller.ManageFeed;
 import androidapp.feedbook.exceptions.FeedException;
@@ -22,7 +28,7 @@ import androidapp.feedbook.exceptions.RSSException;
  * Activities that contain this fragment must implement the
  * to handle interaction events.
  */
-public class SubscribeFragment extends Fragment {
+public class SubscribeFragment extends Fragment implements AdapterView.OnItemSelectedListener {
 
    // private OnFragmentInteractionListener mListener;
 
@@ -30,6 +36,7 @@ public class SubscribeFragment extends Fragment {
     private String category;
     private String url;
     private String inputUser;
+    private Vector choices ;
 
     private static final String user = "user";
 
@@ -63,21 +70,37 @@ public class SubscribeFragment extends Fragment {
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                subscribe();
+                doSubscribe();
             }
         });
 
         manObj = new ManageFeed(this.getContext());
         // Inflate the layout for this fragment
+        Spinner    spinner = (Spinner) view.findViewById(R.id.spinner);
+        // Spinner click listener
+        spinner.setOnItemSelectedListener(this);
+
+        choices = new Vector<CharSequence>();
+        choices.add("News");
+        choices.add("Sports");
+        choices.add("Food");
+        choices.add("Science");
+        choices.add("Travel");
+
+        // Create an ArrayAdapter using the string list and a default spinner layout
+        ArrayAdapter<CharSequence> adapter = new ArrayAdapter(this.getContext(), android.R.layout.simple_spinner_item, this.choices);
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        spinner.setAdapter(adapter);
+
         return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void subscribe() {
+
+    private void doSubscribe() {
         try {
 
-            EditText editcategory = (EditText) getView().findViewById(R.id.edit_cat);
-            category = editcategory.getText().toString();
 
             EditText editurl = (EditText) getView().findViewById(R.id.edit_url);
             url = editurl.getText().toString();
@@ -85,44 +108,27 @@ public class SubscribeFragment extends Fragment {
             if (manObj.subscribeFeed(category, url, inputUser)) {
 
             Toast.makeText(this.getContext(), "Subscribed Successfully !!", Toast.LENGTH_LONG).show();
-        }
+
+                editurl.setText("");
+            }
         } catch (FeedException | JSONFileException | RSSException e) {
             Toast.makeText(this.getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
         }
 
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-/*        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-        */
-    }
+
 
     @Override
-    public void onDetach() {
-        super.onDetach();
-     //   mListener = null;
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        // On selecting a spinner item
+        category = parent.getItemAtPosition(position).toString();
+
+        // Showing selected spinner item
+       // Toast.makeText(parent.getContext(), "Selected: " + category, Toast.LENGTH_LONG).show();
+    }
+    public void onNothingSelected(AdapterView<?> arg0) {
+        // TODO Auto-generated method stub
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-   /* public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }
-    */
 }

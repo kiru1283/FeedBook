@@ -17,13 +17,29 @@
         <item>Table</item>
     </string-array>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
     <string name="title_activity_nav">NavActivity</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+    <string name="category">Category : </string>
+    <string name="url">Feed URL : </string>
+    <string name="category_prompt">Choose a category</string>
+    <string name="unsubscribe">Unsubscribe Feed</string>
+    <string name="subscribe">Subscribe Feed</string>
+
+    <string-array name="category_arrays">
+        <item>News</item>
+        <item>Sports</item>
+        <item>Food</item>
+        <item>Science</item>
+        <item>Travel</item>
+    </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 
 </resources>

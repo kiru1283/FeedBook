@@ -12,6 +12,8 @@ public class Feed {
 	
 	private String categoryName;
 	private String feedName;
+
+
 	
 	private List<Article> entries = new ArrayList<Article>();
 	
