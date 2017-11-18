@@ -8,6 +8,19 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="androidapp.feedbook.SubscribeFragment" >
 
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/AddFeed"
+        android:textStyle="bold"
+        android:layout_gravity="center"
+        android:layout_alignParentLeft="true"
+        android:textSize="20sp"
+        android:paddingBottom="8dp"
+        />
+
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -20,14 +33,16 @@
             android:id="@+id/txt_catsubs"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/category" />
+            android:text="@string/category"
+            android:paddingTop="8dp"/>
 
         <Spinner
             android:id="@+id/spinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:entries="@array/category_arrays"
-            android:prompt="@string/category_prompt" />
+            android:prompt="@string/category_prompt"
+            android:paddingTop="8dp"/>
     </LinearLayout>
 
     <LinearLayout
@@ -36,7 +51,7 @@
         android:id="@+id/linear_second"
         android:layout_alignParentLeft="true"
         android:orientation="horizontal"
-        android:paddingTop="@dimen/activity_vertical_margin"
+        android:paddingTop="8dp"
         android:layout_below="@+id/linear">
        <TextView
             android:id="@+id/txt_url"

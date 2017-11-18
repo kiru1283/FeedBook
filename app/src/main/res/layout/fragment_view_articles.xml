@@ -8,6 +8,18 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="androidapp.feedbook.SubscribeFragment" >
 
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/Artlist"
+        android:textStyle="bold"
+        android:layout_gravity="center"
+        android:layout_alignParentLeft="true"
+        android:textSize="20sp"
+        android:paddingBottom="8dp"
+        />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -2,6 +2,7 @@ package androidapp.feedbook;
 
 
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -17,6 +18,7 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.simple.JSONArray;
@@ -146,6 +148,7 @@ public class ManageFragment extends Fragment implements AdapterView.OnItemSelect
                 //clear the layout for every category
                  content.removeAllViewsInLayout();
                  btn_layout.removeAllViewsInLayout();
+
 
                 ScrollView sv = new ScrollView(getActivity());
                 sv .setLayoutParams(new FrameLayout.LayoutParams(

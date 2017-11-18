@@ -29,6 +29,10 @@
     <string name="category_prompt">Choose a category</string>
     <string name="unsubscribe">Unsubscribe Feed</string>
     <string name="subscribe">Subscribe Feed</string>
+    <string name="Feedlist">List Of Feeds Subscribed</string>
+    <string name="ModFeedlist">List Of Feeds </string>
+    <string name="Artlist">List Of Articles In The Feed </string>
+    <string name="AddFeed">Add Feed Details</string>
 
     <string-array name="category_arrays">
         <item>News</item>

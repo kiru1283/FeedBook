@@ -62,7 +62,15 @@ https://www.journaldev.com/9958/android-navigation-drawer-example-tutorial
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-    }
+
+
+        Fragment     fragment = ViewFeedFragment.newInstance(userid);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+
+
+
+        }
 
     @Override
     public void onBackPressed() {

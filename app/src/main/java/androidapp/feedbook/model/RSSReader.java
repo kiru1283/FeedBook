@@ -3,19 +3,16 @@ package androidapp.feedbook.model;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.google.code.rome.android.repackaged.com.sun.syndication.feed.synd.SyndContentImpl;
+import com.google.code.rome.android.repackaged.com.sun.syndication.feed.synd.SyndEntry;
+import com.google.code.rome.android.repackaged.com.sun.syndication.feed.synd.SyndFeed;
+import com.google.code.rome.android.repackaged.com.sun.syndication.fetcher.FeedFetcher;
+import com.google.code.rome.android.repackaged.com.sun.syndication.fetcher.impl.HttpURLFeedFetcher;
+
 import java.io.InputStream;
 import java.net.URL;
-import java.net.URLConnection;
+import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.zip.GZIPInputStream;
-
-import org.xml.sax.InputSource;
-
-import com.sun.syndication.feed.synd.SyndContentImpl;
-import com.sun.syndication.feed.synd.SyndEntry;
-import com.sun.syndication.feed.synd.SyndFeed;
-import com.sun.syndication.io.SyndFeedInput;
-
 
 import androidapp.feedbook.exceptions.RSSException;
 
@@ -49,6 +46,8 @@ public class RSSReader extends AsyncTask<String, Void, Feed> {
 		SyndFeed feed = null;
 		InputStream inpstr = null;
 		try {
+			/*
+			original code used in console app
 			URLConnection openConnection = new URL(url).openConnection();
 			
 			//some websites have gzip encoding
@@ -61,9 +60,13 @@ public class RSSReader extends AsyncTask<String, Void, Feed> {
 			SyndFeedInput input = new SyndFeedInput();
 
 			feed = input.build(source);
-
 			if (inpstr != null)
 				inpstr.close();
+
+*/
+			FeedFetcher feedFetcher = new HttpURLFeedFetcher();
+			feed =  feedFetcher.retrieveFeed( new URL( url) );
+
 
 		} catch (Exception e) {
 			throw new RSSException(
@@ -93,6 +96,7 @@ public class RSSReader extends AsyncTask<String, Void, Feed> {
 
 		feedObj = new Feed(category, "");
 		int articleid = 0;
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 		for (SyndEntry entry : (List<SyndEntry>) feed.getEntries()) {
 
@@ -107,7 +111,7 @@ public class RSSReader extends AsyncTask<String, Void, Feed> {
 
 			message.setLink(entry.getLink());
 			message.setTitle(entry.getTitle());
-			message.setPubdate(entry.getPublishedDate().toString());
+			message.setPubdate(entry.getPublishedDate()==null?"": sdf.format(entry.getPublishedDate()));
 			message.setArticleid(articleid += 1);
 
 			feedObj.getArticles().add(message);
@@ -118,8 +122,7 @@ public class RSSReader extends AsyncTask<String, Void, Feed> {
 	}
 
 	protected void onPostExecute(Feed feed) {
-		// TODO: check this.exception
-		// TODO: do something with the feed
+
 	}
 
 }

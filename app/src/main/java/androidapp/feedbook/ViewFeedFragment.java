@@ -2,6 +2,7 @@ package androidapp.feedbook;
 
 
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -19,6 +20,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.simple.JSONArray;
@@ -158,8 +160,10 @@ public class ViewFeedFragment extends Fragment implements AdapterView.OnItemSele
                 drawable.setCornerRadius(8);
                 //drawable.setColor(Color.BLUE);
                 ll.setBackgroundDrawable(drawable);
-
                 sv.addView(ll);
+
+
+
                 int id = 101;
                 final RadioButton[] rb = new RadioButton[30];
                 RadioGroup rg = new RadioGroup(this.getContext()); //create the RadioGroup
