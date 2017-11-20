@@ -99,17 +99,24 @@ public class SubscribeFragment extends Fragment implements AdapterView.OnItemSel
 
 
     private void doSubscribe() {
+
         try {
 
 
             EditText editurl = (EditText) getView().findViewById(R.id.edit_url);
             url = editurl.getText().toString();
 
-            if (manObj.subscribeFeed(category, url, inputUser)) {
+            if(url==null || url.trim().isEmpty()){
 
-            Toast.makeText(this.getContext(), "Subscribed Successfully !!", Toast.LENGTH_LONG).show();
+                Toast.makeText(this.getContext(), "No Feed Url Given To Subscribe", Toast.LENGTH_LONG).show();
+            }else {
 
-                editurl.setText("");
+                if (manObj.subscribeFeed(category, url, inputUser)) {
+
+                    Toast.makeText(this.getContext(), "Subscribed Successfully !!", Toast.LENGTH_LONG).show();
+
+                    editurl.setText("");
+                }
             }
         } catch (FeedException | JSONFileException | RSSException e) {
             Toast.makeText(this.getContext(), e.getMessage(), Toast.LENGTH_LONG).show();

@@ -150,7 +150,7 @@ public class LoginActivity extends AppCompatActivity {
                     if (loginObj.validateUser(username, password))
 
                     {
-                        Toast.makeText(getApplicationContext(), "Logged In!!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Logged In!!", Toast.LENGTH_SHORT).show();
                         validUser = true;
 
                     } else {
@@ -165,7 +165,7 @@ public class LoginActivity extends AppCompatActivity {
                 // TODO: register the new account here.
                 try {
                     if (loginObj.createUser(username, password)) {
-                        Toast.makeText(getApplicationContext(), "User account created successfully!!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "User account created successfully!!", Toast.LENGTH_SHORT).show();
                         validUser = true;
 
                     } else {

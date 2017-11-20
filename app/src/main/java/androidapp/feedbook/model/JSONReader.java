@@ -56,6 +56,10 @@ public class JSONReader {
 			if (jsonFileContent.length() != 0) {
 
 				jsonArray = (JSONArray) parser.parse(jsonFileContent);
+			}else
+			{
+				jsonArray = new JSONArray();
+
 			}
 
 			//filereader.close();

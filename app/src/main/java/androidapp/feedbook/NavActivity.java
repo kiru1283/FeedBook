@@ -97,7 +97,16 @@ https://www.journaldev.com/9958/android-navigation-drawer-example-tutorial
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.logout) {
+
+            Intent moveToMain = new Intent(this.getApplicationContext(), LoginActivity.class);
+            moveToMain.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            moveToMain.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            moveToMain.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(moveToMain);
+            NavActivity.this.finish();
+
+
             return true;
         }
 
@@ -116,16 +125,24 @@ https://www.journaldev.com/9958/android-navigation-drawer-example-tutorial
             fragment = SubscribeFragment.newInstance(userid);
 
         } else if (id == R.id.nav_Feed) {
+            //view feeds
             fragment = ViewFeedFragment.newInstance(userid);
         } else if (id == R.id.nav_Fav) {
+            //view favourites
+            fragment = ViewFavFragment.newInstance(userid);
 
         } else if (id == R.id.nav_Manage) {
             //to handle the unsubscribe event
             fragment = ManageFragment.newInstance(userid);
 
-        } else if (id == R.id.nav_share) {
+        } else if (id == R.id.log_out) {
 
-        } else if (id == R.id.nav_send) {
+            Intent moveToMain = new Intent(this.getApplicationContext(), LoginActivity.class);
+            moveToMain.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            moveToMain.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            moveToMain.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(moveToMain);
+            NavActivity.this.finish();
 
         }
 

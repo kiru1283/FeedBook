@@ -1,25 +1,36 @@
 package androidapp.feedbook;
 
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
+
+import androidapp.feedbook.controller.MarkArticle;
+import androidapp.feedbook.exceptions.JSONFileException;
 
 
 /**
@@ -29,15 +40,19 @@ import java.util.Vector;
  */
 public class ViewArticlesFragment extends Fragment {
     private String category;
-    private String url;
+   // private String url;
     private String inputUser;
-    private JSONArray userarrFeed;
+   // private JSONArray userarrFeed;
     private List<String> allArticles;
     private static final String user = "user";
     private static final String articles = "articles";
+    private static final String categ = "category";
+    private MarkArticle articleObj;
+    private JSONArray userArticle = null;
 
-    public ViewArticlesFragment() {
+   public ViewArticlesFragment() {
         // Required empty public constructor
+
     }
 
     /**
@@ -46,12 +61,13 @@ public class ViewArticlesFragment extends Fragment {
      *
      * @return A new instance of fragment ViewArticlesFragment.
      */
-    // TODO: Rename and change types and number of parameters
-    public static ViewArticlesFragment newInstance(String username, ArrayList<String> listArt) {
+
+    public static ViewArticlesFragment newInstance(String username, ArrayList<String> listArt, String category) {
         ViewArticlesFragment fragment = new ViewArticlesFragment();
         Bundle args = new Bundle();
         args.putString(user, username);
         args.putStringArrayList(articles, listArt);
+        args.putString(categ,category);
         fragment.setArguments(args);
         return fragment;
     }
@@ -62,6 +78,7 @@ public class ViewArticlesFragment extends Fragment {
         if (getArguments() != null) {
             inputUser = getArguments().getString(user);
             allArticles = getArguments().getStringArrayList(articles);
+            category = getArguments().getString(categ);
         }
     }
 
@@ -70,6 +87,15 @@ public class ViewArticlesFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view =inflater.inflate(R.layout.fragment_view_articles, container, false);
+
+        articleObj = new MarkArticle(this.getContext());
+
+        //check teh articles marked as favourite
+        try {
+            userArticle = articleObj.viewFavourites(inputUser);
+        } catch (JSONFileException e) {
+            Toast.makeText(this.getContext(),e.getMessage(),Toast.LENGTH_LONG).show();
+        }
 
         LinearLayout content = (LinearLayout) view.findViewById(R.id.linear_top);
         content.removeAllViewsInLayout();
@@ -87,77 +113,188 @@ public class ViewArticlesFragment extends Fragment {
 
         for(String article : allArticles){
 
-            LinearLayout larticle = new LinearLayout(getActivity());
-            larticle.setLayoutParams(new FrameLayout.LayoutParams(
-            FrameLayout.LayoutParams.MATCH_PARENT,
-            FrameLayout.LayoutParams.WRAP_CONTENT));
-            larticle.setOrientation(LinearLayout.VERTICAL);
-
-            GradientDrawable drawable = new GradientDrawable();
-            drawable.setShape(GradientDrawable.RECTANGLE);
-            drawable.setStroke(3, Color.GRAY);
-            drawable.setCornerRadius(8);
-            //drawable.setColor(Color.BLUE);
-            larticle.setBackgroundDrawable(drawable);
-
-            ll.addView(larticle);
-
-
-            String[] array = article.split("\\|", -1);
-            String   link = "";
-            for(int i=0;i<array.length;i++) {
-                String element = array[i].substring(array[i].indexOf("=")+1);
-                String type = array[i].substring(0,array[i].indexOf("="));
-                if(!element.trim().isEmpty() ){
-
-                    if(type.equals("link")){
-
-                          link = element;
-                    }
-                    else {
-                        // create a new textview
-                        TextView rowTextView = new TextView(this.getContext());
-                        if (type.trim().equals("title")) {
-
-                            //rowTextView.setPaintFlags(Paint.FAKE_BOLD_TEXT_FLAG);
-                            rowTextView.setPaintFlags(Paint.UNDERLINE_TEXT_FLAG);
-                            rowTextView.setText(element);
-                            rowTextView.setTextSize(18);
-                            rowTextView.setTextColor(Color.BLUE);
-                            rowTextView.setClickable(true);
-                            rowTextView.setPadding(0, 10, 0, 5);
-                            //tv.setGravity(Gravity.CENTER);
-                            rowTextView.setTag(link);
-                            rowTextView.setOnClickListener(new View.OnClickListener() {
-
-                                @Override
-                                public void onClick(View v) {
-                                    ArticleFragment nextFrag= ArticleFragment.newInstance(v.getTag().toString());
-                                    getActivity().getSupportFragmentManager().beginTransaction()
-                                            .replace(R.id.content_frame, nextFrag,"findThisFragment")
-                                            .addToBackStack(null)
-                                            .commit();
-
-                                }
-                            });
-
-                        }else
-                        {
-                        // set some properties of rowTextView or something
-                        rowTextView.setText(element);
-                        }
-
-                        // add the textview to the linearlayout
-                        larticle.addView(rowTextView);
-                    }
-                }
-            }
+           createArticle(article,ll);
 
         }
         //add the scroll, linearlayout and textview to the mainlayout
         content.addView(sv);
 
         return view;
+    }
+
+    private void createArticle(String article,LinearLayout ll ){
+
+        LinearLayout larticle = new LinearLayout(getActivity());
+        larticle.setLayoutParams(new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.MATCH_PARENT,
+                FrameLayout.LayoutParams.WRAP_CONTENT));
+        larticle.setOrientation(LinearLayout.VERTICAL);
+
+        GradientDrawable drawable = new GradientDrawable();
+        drawable.setShape(GradientDrawable.RECTANGLE);
+        drawable.setStroke(3, Color.GRAY);
+        drawable.setCornerRadius(8);
+        //drawable.setColor(Color.BLUE);
+        larticle.setBackgroundDrawable(drawable);
+
+        ll.addView(larticle);
+
+        boolean fav = false;
+        String[] array = article.split("\\|", -1);
+        String   link = "";
+
+        for(int i=0;i<array.length;i++) {
+            String element = array[i].substring(array[i].indexOf("=")+1);
+            String type = array[i].substring(0,array[i].indexOf("="));
+            if(!element.trim().isEmpty() ){
+
+                if(type.equals("link")){
+
+                    link = element.trim();
+
+                    //check if its a favourite article
+                    for (Object Obj : userArticle) {
+                        JSONObject listObj = (JSONObject) Obj;
+                        if(listObj.get("category").toString().equals(category)&&listObj.get("url").toString().equals(link)) {
+                            fav = true;
+                        }
+                    }
+                }
+                else {
+                    // create a new textview
+                    TextView rowTextView = new TextView(this.getContext());
+                    if (type.trim().equals("title")) {
+
+                        //rowTextView.setPaintFlags(Paint.FAKE_BOLD_TEXT_FLAG);
+
+                        rowTextView.setPaintFlags(Paint.UNDERLINE_TEXT_FLAG);
+                        rowTextView.setId(i + 800);
+                        rowTextView.setText(element);
+                        rowTextView.setTextSize(18);
+                        rowTextView.setTextColor(Color.BLUE);
+                        rowTextView.setClickable(true);
+                        rowTextView.setPadding(0, 10, 0, 5);
+                        //tv.setGravity(Gravity.CENTER);
+                        rowTextView.setTag(link);
+                        rowTextView.setOnClickListener(new View.OnClickListener() {
+
+                            @Override
+                            public void onClick(View v) {
+                                ArticleFragment nextFrag = ArticleFragment.newInstance(v.getTag().toString());
+                                getActivity().getSupportFragmentManager().beginTransaction()
+                                        .replace(R.id.content_frame, nextFrag, "findThisFragment")
+                                        .addToBackStack(null)
+                                        .commit();
+
+                            }
+                        });
+
+                        larticle.addView(rowTextView);
+
+                    }
+                    else if(type.trim().equals("pubdate")) {
+
+                        rowTextView.setText(element);
+
+                        rowTextView
+                                .setLayoutParams(new LinearLayout.LayoutParams(
+                                        LinearLayout.LayoutParams.WRAP_CONTENT,
+                                        LinearLayout.LayoutParams.WRAP_CONTENT,0.8f));
+
+                        //layout to include fav and share button
+                        LinearLayout rtext = new LinearLayout(getActivity());
+                        rtext.setLayoutParams(new FrameLayout.LayoutParams(
+                                FrameLayout.LayoutParams.MATCH_PARENT,
+                                FrameLayout.LayoutParams.WRAP_CONTENT));
+
+                        //button for Star
+                        ToggleButton tglPreference = new ToggleButton(this.getContext());
+                        tglPreference.setId(i);
+                        tglPreference
+                                .setLayoutParams(new LinearLayout.LayoutParams(
+                                        LinearLayout.LayoutParams.WRAP_CONTENT,
+                                        LinearLayout.LayoutParams.WRAP_CONTENT,0.1f));
+                        tglPreference.setTextOn("");
+                        tglPreference.setTextOff("");
+                        tglPreference.setChecked(fav);
+                        tglPreference.setTag(link);
+                        if(fav){
+                            tglPreference.setBackgroundDrawable(ContextCompat.getDrawable(this.getContext(), R.drawable.ic_img_star_yellow));
+                        }else{
+                            tglPreference.setBackgroundDrawable(ContextCompat.getDrawable(this.getContext(), R.drawable.ic_img_star_grey));
+                        }
+
+                        tglPreference.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                            @Override
+                            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                                if (isChecked) {
+                                    buttonView.setBackgroundDrawable(ContextCompat.getDrawable(buttonView.getContext(), R.drawable.ic_img_star_yellow));
+                                    Toast.makeText(buttonView.getContext(),"Marked As Starred Item",Toast.LENGTH_LONG).show();
+                                    markStarred(buttonView.getTag().toString(),false);
+                                }
+                                else {
+                                    buttonView.setBackgroundDrawable(ContextCompat.getDrawable(buttonView.getContext(), R.drawable.ic_img_star_grey));
+                                    Toast.makeText(buttonView.getContext(),"Removed From Starred Items",Toast.LENGTH_LONG).show();
+                                    markStarred(buttonView.getTag().toString(),true);
+                                }
+                            }
+                        });
+
+                        //Imagebutton for sharing
+                        ImageButton imgShare = new ImageButton (this.getContext());
+                        imgShare.setId(i);
+                        imgShare.setLayoutParams(new LinearLayout.LayoutParams(
+                                        LinearLayout.LayoutParams.WRAP_CONTENT,
+                                        LinearLayout.LayoutParams.WRAP_CONTENT,0.1f));
+                        imgShare.setTag(link);
+                        imgShare.setBackgroundDrawable(ContextCompat.getDrawable(this.getContext(), R.drawable.ic_share));
+                        imgShare.setOnClickListener(new View.OnClickListener(){
+
+                                @Override
+                                public void onClick(View view) {
+
+                                    Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+                                    sharingIntent.setType("text/plain");
+                                    String shareBody = "FeedBook User "+inputUser+" would like to share an interesting article "+view.getTag().toString();
+                                    sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Interesting Article");
+                                    sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+                                    startActivity(Intent.createChooser(sharingIntent, "Share via"));
+                                }
+                            }
+                        );
+
+
+                        // add the textview to the linearlayout
+                        rtext.addView(rowTextView);
+
+                        rtext.addView(tglPreference);
+
+                        rtext.addView(imgShare);
+
+                        larticle.addView(rtext);
+
+
+                    }else
+                    {
+                        // set some properties of rowTextView
+                        rowTextView.setText(element);
+                        // add the textview to the linearlayout
+                        larticle.addView(rowTextView);
+                    }
+
+                }
+            }
+        }
+    }
+
+    private void markStarred(String url,boolean remove){
+
+        try {
+            articleObj.saveArticle(category, url, inputUser, remove);
+        } catch (JSONFileException e) {
+            Toast.makeText(this.getContext(),e.getMessage(),Toast.LENGTH_LONG).show();
+        }
+
     }
 
 }

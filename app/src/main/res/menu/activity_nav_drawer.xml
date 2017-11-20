@@ -15,24 +15,17 @@
         <item
             android:id="@+id/nav_Fav"
             android:icon="@drawable/ic_menu_compass"
-            android:title="View Favourites" />
+            android:title="View Starred Articles" />
         <item
             android:id="@+id/nav_Manage"
             android:icon="@drawable/ic_menu_manage"
             android:title="Manage Subscription" />
     </group>
-
-    <item android:title="Communicate">
-        <menu>
-            <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
-            <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Send" />
-        </menu>
-    </item>
+    <group android:checkableBehavior="single">
+    <item
+        android:id="@+id/log_out"
+        android:icon="@drawable/ic_logout"
+        android:title="Log Out" />
+    </group>
 
 </menu>

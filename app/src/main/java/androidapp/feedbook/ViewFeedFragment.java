@@ -1,12 +1,19 @@
 package androidapp.feedbook;
 
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.GradientDrawable;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,7 +48,7 @@ import androidapp.feedbook.exceptions.RSSException;
  * Use the {@link ViewFeedFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ViewFeedFragment extends Fragment implements AdapterView.OnItemSelectedListener,Button.OnClickListener{
+public class ViewFeedFragment extends Fragment implements AdapterView.OnItemSelectedListener,Button.OnClickListener {
     private ManageFeed manObj;
     private String category;
     private String url;
@@ -51,10 +58,13 @@ public class ViewFeedFragment extends Fragment implements AdapterView.OnItemSele
 
     private static final String user = "user";
 
+    View mProgressView;
+    View mViewFormView ;
 
     public ViewFeedFragment() {
         // Required empty public constructor
     }
+
 
     /**
      * Use this factory method to create a new instance of
@@ -62,7 +72,6 @@ public class ViewFeedFragment extends Fragment implements AdapterView.OnItemSele
      *
      * @return A new instance of fragment ViewFeedFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static ViewFeedFragment newInstance(String username) {
         ViewFeedFragment fragment = new ViewFeedFragment();
         Bundle args = new Bundle();
@@ -76,6 +85,8 @@ public class ViewFeedFragment extends Fragment implements AdapterView.OnItemSele
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             inputUser = getArguments().getString(user);
+
+
         }
     }
 
@@ -103,6 +114,26 @@ public class ViewFeedFragment extends Fragment implements AdapterView.OnItemSele
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
+
+        mViewFormView = view.findViewById(R.id.view_form);
+        mProgressView = view.findViewById(R.id.view_progress);
+
+
+        view.setFocusableInTouchMode(true);
+        view.requestFocus();
+        view.setOnKeyListener( new View.OnKeyListener()
+        {
+            @Override
+            public boolean onKey( View v, int keyCode, KeyEvent event )
+            {
+                if( keyCode == KeyEvent.KEYCODE_BACK )
+                {
+                    return true;
+                }
+                return false;
+            }
+        } );
+
 
         return view;
     }
@@ -213,42 +244,94 @@ public class ViewFeedFragment extends Fragment implements AdapterView.OnItemSele
 
     @Override
     public void onClick(View view) {
+
+        // Show a progress spinner, and kick off a background task to
+        showProgress(true);
+
         readFeed();
+
+        showProgress(false);
 
     }
 
-    private void readFeed(){
-        int id =1;
-        ArrayList<String> articles = null;
-        LinearLayout parent = (LinearLayout) getView().findViewById(id); //or whatever your root control is
-        for(int i = 0; i < parent.getChildCount(); i++) {
-            View child = parent.getChildAt(i);
-            if(child instanceof RadioGroup ) {
-                //Support for RadioGroup
-                RadioGroup rad = (RadioGroup)child;
-                int selectedId = rad.getCheckedRadioButtonId();
+    private void readFeed () {
 
-                // find the radiobutton by returned id
-                RadioButton radioButton = (RadioButton) getView().findViewById(selectedId);
+            int id = 1;
+            ArrayList<String> articles = null;
+            LinearLayout parent = (LinearLayout) getView().findViewById(id); //or whatever your root control is
+            for (int i = 0; i < parent.getChildCount(); i++) {
+                View child = parent.getChildAt(i);
+                if (child instanceof RadioGroup) {
+                    //Support for RadioGroup
+                    RadioGroup rad = (RadioGroup) child;
+                    int selectedId = rad.getCheckedRadioButtonId();
 
-                String url = radioButton.getText().toString();
+                    // find the radiobutton by returned id
+                    RadioButton radioButton = (RadioButton) getView().findViewById(selectedId);
 
-                try {
-                    articles = (ArrayList<String>) manObj.readFeed(category, url, inputUser);
+                    String url = radioButton.getText().toString();
 
-                } catch (FeedException | JSONFileException | RSSException e) {
-                    Log.e("Read Feed Exception:",e.getMessage());
+                    try {
+                        articles = (ArrayList<String>) manObj.readFeed(category, url, inputUser);
+
+                    } catch (FeedException | JSONFileException | RSSException e) {
+                        Log.e("Read Feed Exception:", e.getMessage());
+                    }
+
                 }
 
             }
 
+            ViewArticlesFragment nextFrag = ViewArticlesFragment.newInstance(inputUser, articles, category);
+            getActivity().getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.content_frame, nextFrag, "findThisFragment")
+                    .addToBackStack(null)
+                    .commit();
+
         }
 
-        ViewArticlesFragment nextFrag= ViewArticlesFragment.newInstance(inputUser,articles);
-        getActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.content_frame, nextFrag,"findThisFragment")
-                .addToBackStack(null)
-                .commit();
 
+    /**
+     * Shows the progress UI and hides the login form.
+     */
+  //  @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    private void showProgress(final boolean show) {
+
+        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
+        // for very easy animations. If available, use these APIs to fade-in
+        // the progress spinner.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+
+
+            mViewFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+            mViewFormView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mViewFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+                }
+            });
+
+            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            mProgressView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+                }
+            });
+
+
+        } else {
+            // The ViewPropertyAnimator APIs are not available, so simply show
+            // and hide the relevant UI components.
+            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            mViewFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+        }
     }
+
+
+
+
 }

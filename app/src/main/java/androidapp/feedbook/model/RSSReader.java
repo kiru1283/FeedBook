@@ -83,7 +83,7 @@ public class RSSReader extends AsyncTask<String, Void, Feed> {
 	 */
 	@SuppressWarnings("unchecked")
 	//public Feed readFeed() throws  RSSException {
-	protected Feed doInBackground(String... urls) {
+	protected Feed doInBackground(String... urls)  {
 
 		Feed feedObj = null;
 		SyndFeed feed = null;
@@ -98,24 +98,29 @@ public class RSSReader extends AsyncTask<String, Void, Feed> {
 		int articleid = 0;
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-		for (SyndEntry entry : (List<SyndEntry>) feed.getEntries()) {
+		if(feed !=null) {
+			for (SyndEntry entry : (List<SyndEntry>) feed.getEntries()) {
 
-			SyndContentImpl descrip = (SyndContentImpl) entry.getDescription();
+				SyndContentImpl descrip = (SyndContentImpl) entry.getDescription();
 
-			Article message = new Article();
-			message.setCreator(entry.getAuthor());
-			//replace all special characters in the description
-			message.setDescription(descrip.getValue().replaceAll("\\<[^>]*>", ""));
+				Article message = new Article();
+				message.setCreator(entry.getAuthor());
+				//replace all special characters in the description
+				message.setDescription(descrip.getValue().replaceAll("\\<[^>]*>", ""));
 
-			message.setGuid(entry.getUri());
+				message.setGuid(entry.getUri());
 
-			message.setLink(entry.getLink());
-			message.setTitle(entry.getTitle());
-			message.setPubdate(entry.getPublishedDate()==null?"": sdf.format(entry.getPublishedDate()));
-			message.setArticleid(articleid += 1);
+				message.setLink(entry.getLink());
+				message.setTitle(entry.getTitle());
+				message.setPubdate(entry.getPublishedDate() == null ? "" : sdf.format(entry.getPublishedDate()));
+				message.setArticleid(articleid += 1);
 
-			feedObj.getArticles().add(message);
+				feedObj.getArticles().add(message);
 
+			}
+		}else
+		{
+			//throw new RSSException("This URL is not a valid RSS Feed.");
 		}
 
 		return feedObj;
