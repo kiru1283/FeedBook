@@ -1,7 +1,5 @@
-package androidapp.feedbook;
+package androidapp.feedbook.view;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -14,16 +12,16 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import java.util.List;
 import java.util.Vector;
 
+import androidapp.feedbook.R;
 import androidapp.feedbook.controller.ManageFeed;
 import androidapp.feedbook.exceptions.FeedException;
 import androidapp.feedbook.exceptions.JSONFileException;
 import androidapp.feedbook.exceptions.RSSException;
 
 
-/**
+/**Class to accept the feed Url from the user and add to DB.json
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
  * to handle interaction events.
@@ -61,6 +59,13 @@ public class SubscribeFragment extends Fragment implements AdapterView.OnItemSel
         }
     }
 
+    /**
+     * Method to create the elements for accepting the feed url and and spinner to select category
+     * @param inflater - the layout inflater to create the layouts
+     * @param container - the viewgroup container
+     * @param savedInstanceState  - instance data
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -97,7 +102,7 @@ public class SubscribeFragment extends Fragment implements AdapterView.OnItemSel
         return view;
     }
 
-
+    //Method to call the controller to add the url to json file
     private void doSubscribe() {
 
         try {
@@ -135,7 +140,7 @@ public class SubscribeFragment extends Fragment implements AdapterView.OnItemSel
        // Toast.makeText(parent.getContext(), "Selected: " + category, Toast.LENGTH_LONG).show();
     }
     public void onNothingSelected(AdapterView<?> arg0) {
-        // TODO Auto-generated method stub
+
     }
 
 }

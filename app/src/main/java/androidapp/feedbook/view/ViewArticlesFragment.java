@@ -1,4 +1,4 @@
-package androidapp.feedbook;
+package androidapp.feedbook.view;
 
 
 import android.content.Intent;
@@ -8,7 +8,6 @@ import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +15,6 @@ import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,13 +25,13 @@ import org.json.simple.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
+import androidapp.feedbook.R;
 import androidapp.feedbook.controller.MarkArticle;
 import androidapp.feedbook.exceptions.JSONFileException;
 
 
-/**
+/**Class to display the articles in a feed
  * A simple {@link Fragment} subclass.
  * Use the {@link ViewArticlesFragment#newInstance} factory method to
  * create an instance of this fragment.
@@ -58,7 +56,9 @@ public class ViewArticlesFragment extends Fragment {
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
-     *
+     *@param category -the category of the feed of which the articles are displayed
+     * @param username - the username of the logged in user
+     * @param listArt - the list of articles to be displayed
      * @return A new instance of fragment ViewArticlesFragment.
      */
 
@@ -122,6 +122,11 @@ public class ViewArticlesFragment extends Fragment {
         return view;
     }
 
+    /**
+     * Method to create the layout to display the article details
+     * @param article - the string with all details of a single article in the feeed
+     * @param ll - Linear Layout in which the article will be displayed
+     */
     private void createArticle(String article,LinearLayout ll ){
 
         LinearLayout larticle = new LinearLayout(getActivity());
@@ -287,6 +292,7 @@ public class ViewArticlesFragment extends Fragment {
         }
     }
 
+    //Method to save or remove the article url from the favourites.json
     private void markStarred(String url,boolean remove){
 
         try {

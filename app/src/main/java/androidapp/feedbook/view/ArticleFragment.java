@@ -1,10 +1,7 @@
-package androidapp.feedbook;
+package androidapp.feedbook.view;
 
 
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,8 +9,10 @@ import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import androidapp.feedbook.R;
 
-/**
+
+/** This class is to display the chosen article in a webview control
  * A simple {@link Fragment} subclass.
  * Use the {@link ArticleFragment#newInstance} factory method to
  * create an instance of this fragment.
@@ -30,7 +29,7 @@ public class ArticleFragment extends Fragment {
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
-     *
+     *@param link - the link of the atricle to be displayed
      * @return A new instance of fragment ArticleFragment.
      */
      public static ArticleFragment newInstance(String link) {
@@ -51,6 +50,13 @@ public class ArticleFragment extends Fragment {
         }
     }
 
+    /**
+     * Method to create the view which displays the webview control
+     * @param inflater - the layout inflater to create the layouts
+     * @param container - the viewgroup container
+     * @param savedInstanceState  - instance data
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

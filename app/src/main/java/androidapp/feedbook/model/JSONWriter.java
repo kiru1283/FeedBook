@@ -101,7 +101,7 @@ public class JSONWriter {
 		return retVal;
 	}
 
-
+	//Method to create the json file in the FeedBookDir directory and write the content to file
 	private boolean wrtieFileOnInternalStorage  ( String sBody) throws JSONFileException{
 		boolean retVal = false;
 		File fileDir = new File(mcoContext.getFilesDir(),"FeedBookDir");

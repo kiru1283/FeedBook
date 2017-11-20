@@ -1,4 +1,4 @@
-package androidapp.feedbook;
+package androidapp.feedbook.view;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -24,7 +24,7 @@ import androidapp.feedbook.exceptions.AuthenticationException;
 import androidapp.feedbook.exceptions.JSONFileException;
 
 /**
- * A login screen that offers login via username/password.
+ *  A login screen that offers login via username/password.
  */
 public class LoginActivity extends AppCompatActivity {
 
@@ -41,6 +41,10 @@ public class LoginActivity extends AppCompatActivity {
     private View mProgressView;
     private View mLoginFormView;
 
+    /**
+     * Method to create the Activity and all the view elements in the activiy
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -145,7 +149,7 @@ public class LoginActivity extends AppCompatActivity {
 
             if (userExists) {
 
-                //TODO: password validation
+                // password validation
                 try {
                     if (loginObj.validateUser(username, password))
 
@@ -162,7 +166,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
             } else {
 
-                // TODO: register the new account here.
+                // register the new account here.
                 try {
                     if (loginObj.createUser(username, password)) {
                         Toast.makeText(getApplicationContext(), "User account created successfully!!", Toast.LENGTH_SHORT).show();
@@ -191,15 +195,14 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private boolean isUserValid(String username) {
-        //TODO: Replace this with your own logic
-        //      return username.contains("@");
-        return true;
+     //handle short username
+        return username.length() > 4;
     }
 
     private boolean isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
-//        return password.length() > 4;
-        return true;
+        //handle short password
+        return password.length() > 4;
+//        return true;
     }
 
     /**

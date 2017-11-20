@@ -72,6 +72,7 @@ public class JSONReader {
 		return jsonArray;
 	}
 
+	//method to get the content of JSON file
 	private String loadJSON() throws IOException {
 		String json = null;
 			File fileDir = new File(context.getFilesDir(),"FeedBookDir");

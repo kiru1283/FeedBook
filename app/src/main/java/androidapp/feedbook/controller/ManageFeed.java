@@ -30,7 +30,6 @@ public class ManageFeed {
 	
 	private static final String dbfilename = "DB.json";
 	public ManageFeed(Context context){
-//       userfilename = Context.getResources().getAssets().open("filename");
 		this.context = context;
 	}
 
@@ -236,7 +235,13 @@ public class ManageFeed {
 		return retVal;
 
 	}
-	
+
+	/**
+	 * Method to get the feeds that are subscribed by the current user
+	 * @param userarrFeed - JSON array with all feeds
+	 * @param inputUser - user name of the current input user
+	 * @return - array of feeds linked with the current user name
+	 */
 	@SuppressWarnings("unchecked")
 	public JSONArray userFeeds(JSONArray userarrFeed, String inputUser) {		
 		

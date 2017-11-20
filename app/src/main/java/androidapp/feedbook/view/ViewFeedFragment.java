@@ -1,16 +1,12 @@
-package androidapp.feedbook;
+package androidapp.feedbook.view;
 
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.drawable.GradientDrawable;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -20,30 +16,28 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Vector;
 
+import androidapp.feedbook.R;
 import androidapp.feedbook.controller.ManageFeed;
 import androidapp.feedbook.exceptions.FeedException;
 import androidapp.feedbook.exceptions.JSONFileException;
 import androidapp.feedbook.exceptions.RSSException;
 
 
-/**
+/**Class to display the feeds added by the user in DB.json
  * A simple {@link Fragment} subclass.
  * Use the {@link ViewFeedFragment#newInstance} factory method to
  * create an instance of this fragment.
@@ -151,6 +145,7 @@ public class ViewFeedFragment extends Fragment implements AdapterView.OnItemSele
 
     }
 
+    //Method to fetch the feeds to which the user has subscribed
     private boolean userFeeds(String inputUser,String category) {
 
         boolean nofeed = true;
@@ -254,6 +249,7 @@ public class ViewFeedFragment extends Fragment implements AdapterView.OnItemSele
 
     }
 
+    //Method to call the controller to read the RSS feed and pass the list of atricles to be displayed
     private void readFeed () {
 
             int id = 1;

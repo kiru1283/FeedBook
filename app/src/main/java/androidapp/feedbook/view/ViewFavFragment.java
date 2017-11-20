@@ -1,4 +1,4 @@
-package androidapp.feedbook;
+package androidapp.feedbook.view;
 
 
 import android.graphics.Color;
@@ -26,11 +26,12 @@ import org.json.simple.JSONObject;
 
 import java.util.Vector;
 
+import androidapp.feedbook.R;
 import androidapp.feedbook.controller.MarkArticle;
 import androidapp.feedbook.exceptions.JSONFileException;
 
 
-/**
+/** Class to display the list of articles marked as favourite
  * A simple {@link Fragment} subclass.
  * Use the {@link ViewFavFragment#newInstance} factory method to
  * create an instance of this fragment.
@@ -50,7 +51,7 @@ public class ViewFavFragment extends Fragment implements AdapterView.OnItemSelec
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
-     *
+     *@param username - username of the logged in user
      * @return A new instance of fragment ViewFavFragment.
      */
 
@@ -121,6 +122,10 @@ public class ViewFavFragment extends Fragment implements AdapterView.OnItemSelec
 
     }
 
+    /**
+     * Method to dispaly the list of articles marked as starred from the favourites.json
+     * @param category - the category of the feed in which the article was viewed
+     */
     private void getStarred(String category){
 
         LinearLayout content = (LinearLayout) getView().findViewById(R.id.linear_fav);
@@ -253,7 +258,7 @@ public class ViewFavFragment extends Fragment implements AdapterView.OnItemSelec
 
     }
 
-
+    //Method to save or remove the article url from the favourites.json
     private void markStarred(String url,boolean remove){
 
         try {

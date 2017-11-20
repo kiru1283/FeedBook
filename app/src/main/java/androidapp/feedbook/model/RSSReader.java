@@ -126,8 +126,5 @@ public class RSSReader extends AsyncTask<String, Void, Feed> {
 		return feedObj;
 	}
 
-	protected void onPostExecute(Feed feed) {
-
-	}
 
 }

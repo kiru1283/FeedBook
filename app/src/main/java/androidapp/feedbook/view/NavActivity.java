@@ -1,13 +1,10 @@
-package androidapp.feedbook;
+package androidapp.feedbook.view;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -17,6 +14,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import androidapp.feedbook.R;
+
+/**
+ * Activity to hold the navigation bar for the application to display options to user
+ */
 public class NavActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -27,15 +29,6 @@ public class NavActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nav);
 
-        /*
-https://www.journaldev.com/9958/android-navigation-drawer-example-tutorial
-      //  username = (TextView) findViewById(R.id.text_user);
-
-        //    username.setText(userid);
-
-
-*/
-
         Intent intentLogin = getIntent();
         if(intentLogin.hasExtra(Intent.EXTRA_TEXT)){
             userid = intentLogin.getStringExtra(Intent.EXTRA_TEXT);
@@ -44,15 +37,6 @@ https://www.journaldev.com/9958/android-navigation-drawer-example-tutorial
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-/*        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-        */
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -68,10 +52,11 @@ https://www.journaldev.com/9958/android-navigation-drawer-example-tutorial
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
 
-
-
         }
 
+    /**
+     * Method to diable back button
+     */
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -113,7 +98,11 @@ https://www.journaldev.com/9958/android-navigation-drawer-example-tutorial
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
+    /**
+     * Method to load the fragment based on the option selected
+     * @param item - the item selected from the navigation bar
+     * @return
+     */
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
@@ -136,7 +125,7 @@ https://www.journaldev.com/9958/android-navigation-drawer-example-tutorial
             fragment = ManageFragment.newInstance(userid);
 
         } else if (id == R.id.log_out) {
-
+            //to close the fragment and go to login screen
             Intent moveToMain = new Intent(this.getApplicationContext(), LoginActivity.class);
             moveToMain.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             moveToMain.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);

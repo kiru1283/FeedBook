@@ -91,7 +91,14 @@ public class LoginValidation {
 
     }
 
-    //Method to check is user exists in users.json and fetch the previous salt and password
+
+
+    /**
+     * Method to check is user exists in users.json and fetch the previous salt and password
+     * @param userid - username of the logged in user
+     * @return - true if its username is aalready used
+     * @throws JSONFileException - when there is an error reading the users.json file
+     */
     @SuppressWarnings("unchecked")
     public boolean checkUser(String userid) throws JSONFileException {
 

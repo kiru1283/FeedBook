@@ -1,8 +1,7 @@
-package androidapp.feedbook;
+package androidapp.feedbook.view;
 
 
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -18,7 +17,6 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.simple.JSONArray;
@@ -26,12 +24,13 @@ import org.json.simple.JSONObject;
 
 import java.util.Vector;
 
+import androidapp.feedbook.R;
 import androidapp.feedbook.controller.ManageFeed;
 import androidapp.feedbook.exceptions.FeedException;
 import androidapp.feedbook.exceptions.JSONFileException;
 
 
-/**
+/**Class to create a screen for Unsubscribing from the feed url
  * A simple {@link Fragment} subclass.
  * Use the {@link ManageFragment#newInstance} factory method to
  * create an instance of this fragment.
@@ -55,7 +54,7 @@ public class ManageFragment extends Fragment implements AdapterView.OnItemSelect
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
-     *
+     *@param - username of the logged in user
      * @return A new instance of fragment ManageFragment.
      */
 
@@ -76,6 +75,13 @@ public class ManageFragment extends Fragment implements AdapterView.OnItemSelect
         }
     }
 
+    /**
+     * Method to create the layout and the spinner for selecting category of feed
+     * @param inflater - the layout inflater to create the layouts
+     * @param container - the viewgroup contained
+     * @param savedInstanceState  - instance data
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -117,7 +123,6 @@ public class ManageFragment extends Fragment implements AdapterView.OnItemSelect
 
         userFeeds(inputUser,category);
 
-
     }
 
     @Override
@@ -125,6 +130,7 @@ public class ManageFragment extends Fragment implements AdapterView.OnItemSelect
 
     }
 
+    //method to fetch feeds linked to the current user name and display them with an option to remove
     private boolean userFeeds(String inputUser,String category) {
 
         boolean nofeed = true;
@@ -215,6 +221,10 @@ public class ManageFragment extends Fragment implements AdapterView.OnItemSelect
         return nofeed;
     }
 
+    /**
+     * Method to remove  the feed url from DB.json file
+     * @param view - the view holding the url which has to be removed
+     */
     public void doUnsubscribe(View view){
         int id =1;
         LinearLayout parent = (LinearLayout) getView().findViewById(id); //or whatever your root control is
@@ -244,6 +254,10 @@ public class ManageFragment extends Fragment implements AdapterView.OnItemSelect
         }
     }
 
+    /**
+     * On click method for the Remove Feed button
+     * @param view - the view holding the url which has to be removed
+     */
     @Override
     public void onClick(View view) {
         doUnsubscribe(view);
